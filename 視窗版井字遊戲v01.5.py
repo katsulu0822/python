@@ -9,10 +9,13 @@ button_states = [False,False,False,False,False,False,False,False,False]
 #button_states = [1,2,3,4,5,6,7,8,9]
 
 current_player = "X" #X先手
+title = ""
+question = ""
+answer = ""
 def on_button_click(index):
    
    
-    global current_player
+    global current_player,button_states,title,question,answer
     if current_player == "X":
     # 更新按鈕的狀態為已按下並將按現玩家更新到按鈕text 
         buttons[index].config(text=current_player)
@@ -27,12 +30,14 @@ def on_button_click(index):
         buttons[index].config(state="disabled")
         print(button_states)
         #current_player = "X"
+    #current_player = "O" if current_player == "X" else "X"
     # 如果所有按鈕都被按下且沒有分出勝負
     if all(button_states):
-        root.title("平手")
+        title = "平手"
+        root.title(title)
         
     #每次按下按紐都會判定8種button_states 來確認是否有人獲勝
-    if button_states[0] == button_states[1] == button_states[2] != False or\
+    elif button_states[0] == button_states[1] == button_states[2] != False or\
        button_states[3] == button_states[4] == button_states[5] != False or\
        button_states[6] == button_states[7] == button_states[8] != False or\
        button_states[0] == button_states[3] == button_states[6] != False or\
@@ -43,15 +48,38 @@ def on_button_click(index):
         for btn in buttons: #當有人獲勝後將剩餘按鈕disable
             btn.config(state="disabled")   
             title = current_player+"  WIN!!!"   
-        
+            root.title(title)
    
-        root.title(title)
-        answer = messagebox.askquestion("詢問", "你想繼續嗎？")
+        
+    if  title == (current_player+"  WIN!!!"): 
+        question = current_player+"獲勝"
+        answer = messagebox.askquestion(question, "你想繼續嗎？")
         if answer == "no":
-                root.destroy()  # 關閉主視窗
+                    root.destroy()  # 關閉主視窗
         if answer == "yes":        
-         for btn in buttons: #當有人獲勝後將剩餘按鈕disable
-          btn.config(state="normal")
+              for btn in buttons: #當有人獲勝後將剩餘按鈕disable
+              
+                  btn.config(state="normal")
+                  btn.config(text=" ")
+                  title = "井字遊戲"+current_player+"先手"
+                  root.title(title)
+                  button_states = [False,False,False,False,False,False,False,False,False]
+                  current_player = "O" if current_player == "X" else "X"
+    elif title == "平手":
+        question = "不分勝負"
+        answer = messagebox.askquestion(question, "你想繼續嗎？")
+        if answer == "no":
+                    root.destroy()  # 關閉主視窗
+        if answer == "yes":        
+              for btn in buttons: #當有人獲勝後將剩餘按鈕disable
+              
+                  btn.config(state="normal")
+                  btn.config(text=" ")
+                  title = "井字遊戲"+current_player+"先手"
+                  root.title(title)
+                  button_states = [False,False,False,False,False,False,False,False,False]
+                  current_player = "O" if current_player == "X" else "X"
+                  
     current_player = "O" if current_player == "X" else "X"
 
 # 建立主視窗
